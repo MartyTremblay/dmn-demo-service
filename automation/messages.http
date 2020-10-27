@@ -1,0 +1,57 @@
+@host=http://localhost:8080/dmnDemo
+
+### download dmn ###
+GET {{host}}/messages http/1.1
+
+### execute dmn ###
+POST {{host}}/messages http/1.1
+Content-Type: application/json
+
+{
+    "messageId": 1001,
+    "messageName": "Asset-AssetType"
+}
+
+### execute dmn, with trace ###
+POST {{host}}/messages/dmnresult http/1.1
+Content-Type: application/json
+
+{
+    "messageId": 10001,
+    "messageName": "Asset-AssetType"
+}
+
+### graceful exit, on error ###
+POST {{host}}/messages http/1.1
+Content-Type: application/json
+
+{
+    "messageName": "Asset-AssetType"
+}
+
+### validation message ###
+POST {{host}}/messages/getMessageByIdAndName http/1.1
+Content-Type: application/json
+
+{
+    "messageId": 10001,
+    "messageName": "Asset-AssetType"
+}
+
+### calculation message ###
+POST {{host}}/messages/getMessageByIdAndName http/1.1
+Content-Type: application/json
+
+{
+    "messageId": 1002,
+    "messageName": "Cash-On-Hand-Ineligible"
+}
+
+### no message found ###
+POST {{host}}/messages/getMessageByIdAndName http/1.1
+Content-Type: application/json
+
+{
+    "messageId": 101,
+    "messageName": "test-msg"
+}

@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: local
+  main:
+    log-startup-info: true
+    banner-mode: console
