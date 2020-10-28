@@ -1,6 +1,7 @@
-<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="com.thirtySevenDecisions.demo.mortgageCalc" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:included1="com.thirtySevenDecisions.demo.common.messages" id="_2E154EC7-ADA2-405C-95D8-8C582B87D695" name="requiredFundsCalculation" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="com.thirtySevenDecisions.demo.mortgageCalc">
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="com.thirtySevenDecisions.demo.mortgageCalc" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:included1="com.thirtySevenDecisions.demo.common.messages" xmlns:included2="com.thirtySevenDecisions.demo.common.configuration" id="_2E154EC7-ADA2-405C-95D8-8C582B87D695" name="assetCalculations" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="com.thirtySevenDecisions.demo.mortgageCalc">
   <dmn:extensionElements/>
   <dmn:import id="_C6C64B54-0E93-4132-AE38-DEDBDA03F200" name="msgService" namespace="com.thirtySevenDecisions.demo.common.messages" locationURI="messages.dmn" importType="http://www.omg.org/spec/DMN/20180521/MODEL/"/>
+  <dmn:import id="_58824B3C-7F53-4224-A8BC-8F6DCF23DBCF" name="configService" namespace="com.thirtySevenDecisions.demo.common.configuration" locationURI="configuration.dmn" importType="http://www.omg.org/spec/DMN/20180521/MODEL/"/>
   <dmn:itemDefinition id="_D0E7C061-1411-4ED9-8C73-4927566D6C01" name="Relationship" isCollection="false">
     <dmn:itemComponent id="_6851213F-6D78-47A4-BF88-47F35FABD7B9" name="from" isCollection="false">
       <dmn:typeRef>string</dmn:typeRef>
@@ -16,7 +17,7 @@
     <dmn:typeRef>Relationship</dmn:typeRef>
   </dmn:itemDefinition>
   <dmn:itemDefinition id="_DA27D350-733D-468C-9B04-BB43DD4A0D28" name="RealEstateOwnedProperty" isCollection="false">
-    <dmn:itemComponent id="_21F07342-AF99-483F-A6CB-3BFA2FEE8235" name="label" isCollection="false">
+    <dmn:itemComponent id="_21F07342-AF99-483F-A6CB-3BFA2FEE8235" name="identifier" isCollection="false">
       <dmn:typeRef>string</dmn:typeRef>
     </dmn:itemComponent>
     <dmn:itemComponent id="_284AAE51-4CAA-46EF-94F0-D62E4D212660" name="dispositionStatusType" isCollection="false">
@@ -37,6 +38,23 @@
   </dmn:itemDefinition>
   <dmn:itemDefinition id="_06964A7B-575F-4DDD-AEBF-B35B876A3358" name="stringList" isCollection="true">
     <dmn:typeRef>string</dmn:typeRef>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_4C19E674-1E90-4EE9-BBF8-E17DD544DD9F" name="AnticipatedRealEstateSalesProceedsAmountResult" isCollection="false">
+    <dmn:itemComponent id="_0F61126A-6648-4C08-8410-937E624B8C3F" name="rowIdentifier" isCollection="false">
+      <dmn:typeRef>string</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_D0C4D2E4-902D-4148-909E-205D3F2D6382" name="reoIdentifier" isCollection="false">
+      <dmn:typeRef>string</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_E9AE791E-C6BD-4AB7-B10A-9C5A9F00729E" name="borrowerIdentifier" isCollection="false">
+      <dmn:typeRef>string</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2A1BA489-9BDE-4CBD-BEB1-6BFE7C4CE409" name="anticipatedRealEstateSalesProceedsAmount" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_52B0FEB2-E62A-4BF8-AABD-9F8DD7233048" name="anticipatedRealEstateSalesProceedsAmountResults" isCollection="true">
+    <dmn:typeRef>AnticipatedRealEstateSalesProceedsAmountResult</dmn:typeRef>
   </dmn:itemDefinition>
   <dmn:inputData id="_AAD3F6EA-DF27-4024-A001-E434920B6784" name="relationships">
     <dmn:extensionElements/>
@@ -60,7 +78,7 @@
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:literalExpression id="_42100EA4-0B45-4766-A1E0-06EB87C3FEA5">
-          <dmn:text>reoProperties[list contains(filteredREOLabels, label)]</dmn:text>
+          <dmn:text>reoProperties[list contains(filteredREOLabels, identifier)]</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
     </dmn:context>
@@ -69,19 +87,212 @@
     <dmn:extensionElements/>
     <dmn:variable id="_6229AD52-F45F-49EB-88DB-936180DDDE39" name="reoProperties" typeRef="realEstateOwnedProperties"/>
   </dmn:inputData>
-  <dmn:decision id="_D9C208A3-7D2D-441A-8883-C208A32E1C57" name="Result">
+  <dmn:decision id="_D9C208A3-7D2D-441A-8883-C208A32E1C57" name="anticipatedRealEstateSalesProceedsAmountResults">
     <dmn:extensionElements/>
-    <dmn:variable id="_0CB0CCF3-9BB7-4A28-8BF8-A777BE671A6E" name="Result" typeRef="msgService.Message"/>
+    <dmn:variable id="_0CB0CCF3-9BB7-4A28-8BF8-A777BE671A6E" name="anticipatedRealEstateSalesProceedsAmountResults" typeRef="anticipatedRealEstateSalesProceedsAmountResults"/>
     <dmn:informationRequirement id="_FED02174-3757-4236-BFF7-753AF30EB4E2">
       <dmn:requiredDecision href="#_5939B1AB-16B0-498A-8D7B-4A1205FB1CA0"/>
     </dmn:informationRequirement>
-    <dmn:knowledgeRequirement id="_4F547FBA-53F9-4A26-96DA-B50114E9767B">
-      <dmn:requiredKnowledge href="com.thirtySevenDecisions.demo.common.messages#_66927C04-5FD6-4771-BFB7-8B04B0FEADE1"/>
+    <dmn:informationRequirement id="_0721945A-B6B9-4726-A018-5EE0767846AF">
+      <dmn:requiredInput href="#_5B11FC30-51BE-4C87-8CC0-C9C73787AD52"/>
+    </dmn:informationRequirement>
+    <dmn:knowledgeRequirement id="_92438FF7-73FF-4E6B-B96D-E214882AA732">
+      <dmn:requiredKnowledge href="#_83093311-0859-434B-B622-91A61AF1C10C"/>
     </dmn:knowledgeRequirement>
-    <dmn:literalExpression id="_BC52CFB1-F36A-41C5-958E-8697FDCE0C30">
-      <dmn:text>msgService.getMessageByIdAndName(1002, "Cash-In-Hand-Ineligible")</dmn:text>
+    <dmn:literalExpression id="_6A445556-76DB-4661-B658-0A52EEEB2BA9">
+      <dmn:text>for reoProperty in filteredREOs return 
+  calculateAnticipatedREOSalesProceedsAmount(
+    relationships[contains(arcRole, "ASSET_IsAssociatedWith_ROLE") and to = reoProerty.identifier].from[1], 
+    reoProperty, 
+    context
+  )</dmn:text>
     </dmn:literalExpression>
   </dmn:decision>
+  <dmn:businessKnowledgeModel id="_83093311-0859-434B-B622-91A61AF1C10C" name="calculateAnticipatedREOSalesProceedsAmount">
+    <dmn:extensionElements/>
+    <dmn:variable id="_B62CC8C9-1A8D-4371-B4B0-D718F9E97A28" name="calculateAnticipatedREOSalesProceedsAmount" typeRef="AnticipatedRealEstateSalesProceedsAmountResult"/>
+    <dmn:encapsulatedLogic id="_CDC3E314-C534-4F29-9202-5F3C08DBBF23" kind="FEEL">
+      <dmn:formalParameter id="_A827615F-66D8-4E53-B58D-74AA6EDCBF07" name="borrowerIdentifier" typeRef="string"/>
+      <dmn:formalParameter id="_B6B1161C-3C9A-47AC-AFC0-79B7C7F37C06" name="reoProperty" typeRef="RealEstateOwnedProperty"/>
+      <dmn:formalParameter id="_8355C14F-47B7-4F9C-913E-8666CCEF2106" name="context" typeRef="configService.Context"/>
+      <dmn:context id="_8B82F1B8-A182-41E7-8D55-0E81DA08EDAC">
+        <dmn:contextEntry>
+          <dmn:variable id="_0A7E67E2-396C-4169-BB01-A214BB2DB5BB" name="dispositionStatusType" typeRef="string"/>
+          <dmn:literalExpression id="_19188133-519C-4842-87E2-958CD4F881BA">
+            <dmn:text>reoProperty.dispositionStatusType</dmn:text>
+          </dmn:literalExpression>
+        </dmn:contextEntry>
+        <dmn:contextEntry>
+          <dmn:variable id="_FEBB1C7F-638F-4B41-BE46-60865F104E19" name="lienUPBAmount" typeRef="number"/>
+          <dmn:literalExpression id="_67AB7C3B-D459-4F4F-9F92-9EEC583185D6">
+            <dmn:text>reoProperty.lienUPBAmount</dmn:text>
+          </dmn:literalExpression>
+        </dmn:contextEntry>
+        <dmn:contextEntry>
+          <dmn:variable id="_0EA244F0-49A1-48D7-9933-AD38E8CA1EBA" name="propertyEstimatedValueAmount" typeRef="number"/>
+          <dmn:literalExpression id="_E9960514-0FDC-4150-AF73-1002474C7EE4">
+            <dmn:text>reoProperty.propertyEstimatedValueAmount</dmn:text>
+          </dmn:literalExpression>
+        </dmn:contextEntry>
+        <dmn:contextEntry>
+          <dmn:variable id="_356BDF3D-1216-44D9-AF42-588BB89D555A" name="propertyValuationAmount" typeRef="number"/>
+          <dmn:literalExpression id="_0F7F9A24-F67D-4FC9-B128-A41FABC7EB9F">
+            <dmn:text>reoProperty.propertyValuationAmount</dmn:text>
+          </dmn:literalExpression>
+        </dmn:contextEntry>
+        <dmn:contextEntry>
+          <dmn:variable id="_FA829018-8721-49D7-A578-AE222773CB2E" name="anticipatedREOSalesProceedsAdjustmentFactor" typeRef="number"/>
+          <dmn:literalExpression id="_7FFB430E-6861-4307-9A08-D2097EAD1FF5">
+            <dmn:text>configService.getAnticipatedREOSalesProceedsAdjustmentFactor(context)</dmn:text>
+          </dmn:literalExpression>
+        </dmn:contextEntry>
+        <dmn:contextEntry>
+          <dmn:variable id="_ADD9BB27-D47A-4988-953F-A4B2361476E9" name="result" typeRef="AnticipatedRealEstateSalesProceedsAmountResult"/>
+          <dmn:decisionTable id="_D1A6D79E-1165-4A64-AE5E-195BC0AECC78" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+            <dmn:input id="_F6C0E2FF-734D-4CAB-816E-2CE1039EFEFB">
+              <dmn:inputExpression id="_52ECBCB4-1757-485B-8EEA-8CDDC8CA679B" typeRef="string">
+                <dmn:text>dispositionStatusType</dmn:text>
+              </dmn:inputExpression>
+            </dmn:input>
+            <dmn:input id="_20E529EF-2E86-4B2C-9CA7-79B0A38236BD">
+              <dmn:inputExpression id="_28D7E774-D811-4FD2-BD9C-2B3AD4013680" typeRef="number">
+                <dmn:text>lienUPBAmount</dmn:text>
+              </dmn:inputExpression>
+            </dmn:input>
+            <dmn:input id="_D066A116-B7DA-40FB-B2BA-4C2B285C6C0E">
+              <dmn:inputExpression id="_0B7AAC77-5AD1-4E25-ADE9-88494397B608" typeRef="number">
+                <dmn:text>propertyEstimatedValueAmount</dmn:text>
+              </dmn:inputExpression>
+            </dmn:input>
+            <dmn:input id="_1237F2C2-8396-4C85-A661-8388D3A9A836">
+              <dmn:inputExpression id="_CF9C4778-85F7-4B0A-9710-8C3DBD812071" typeRef="number">
+                <dmn:text>propertyValuationAmount</dmn:text>
+              </dmn:inputExpression>
+            </dmn:input>
+            <dmn:output id="_CA144937-93E4-4EA3-8D69-D64C51622DA7" name="anticipatedRealEstateSalesProceedsAmount" typeRef="number"/>
+            <dmn:output id="_D3F79C35-7AE8-494E-815D-22611EBE5256" name="rowIdentifier" typeRef="string"/>
+            <dmn:annotation name="annotation-1"/>
+            <dmn:rule id="_FCCF3292-022C-4066-A0DC-5FA329310C72">
+              <dmn:inputEntry id="_ECDD293E-EC5A-4589-AC40-18AA3BCF6DFE">
+                <dmn:text>? in ["PendingSale", "Sold"]</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_C0A7F131-B25A-4AED-8C0F-971E2A846776">
+                <dmn:text>!=null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_64894B48-D5E6-4024-93D3-16CE11D36222">
+                <dmn:text>null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_D314F3D4-D057-4F4F-9AF2-EF5FE1A5A439">
+                <dmn:text>null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:outputEntry id="_D9E6BD03-2120-429E-A76A-E4241803784B">
+                <dmn:text>-lienUPBAmount</dmn:text>
+              </dmn:outputEntry>
+              <dmn:outputEntry id="_7CD76909-DED0-40FD-954B-561CC458D0F1">
+                <dmn:text>"001_calculateAnticipatedREOSalesProceedsAmount"</dmn:text>
+              </dmn:outputEntry>
+              <dmn:annotationEntry>
+                <dmn:text/>
+              </dmn:annotationEntry>
+            </dmn:rule>
+            <dmn:rule id="_8DB90C7F-09C7-44F1-BF04-6B9F939F7E63">
+              <dmn:inputEntry id="_BA9D6678-FB33-4555-B181-431EBD2F392D">
+                <dmn:text>? in ["PendingSale", "Sold"]</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_F8776C01-9935-4E53-AE74-10343D32DAA8">
+                <dmn:text>!=null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_4FF664E1-224D-401F-B53C-F5918A9A4AE1">
+                <dmn:text>&gt;=0</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_E4778884-AFA6-4E23-8060-CE684D938AE5">
+                <dmn:text>null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:outputEntry id="_15817BD9-D3F6-43E1-9374-A5F6EE2CF90A">
+                <dmn:text>(propertyEstimatedValueAmount * anticipatedREOSalesProceedsAdjustmentFactor) - lienUPBAmount</dmn:text>
+              </dmn:outputEntry>
+              <dmn:outputEntry id="_8F2EC7EC-3F9B-408D-92E2-6D6AFE0F0096">
+                <dmn:text>"002_calculateAnticipatedREOSalesProceedsAmount"</dmn:text>
+              </dmn:outputEntry>
+              <dmn:annotationEntry>
+                <dmn:text/>
+              </dmn:annotationEntry>
+            </dmn:rule>
+            <dmn:rule id="_A857685B-B221-4129-8517-E9A7D9001B67">
+              <dmn:inputEntry id="_F4B33827-74A8-4938-9FF7-F64E300C0179">
+                <dmn:text>? in ["PendingSale", "Sold"]</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_E30B782B-C709-45D7-B69E-480F774430F0">
+                <dmn:text>!=null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_EC3F719C-9AEA-4129-B340-AFAE144AE658">
+                <dmn:text>null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_C6DA5C68-2E41-4457-B8B7-0282283EF243">
+                <dmn:text>&gt;=0</dmn:text>
+              </dmn:inputEntry>
+              <dmn:outputEntry id="_BB367FB3-E8C5-4DC9-BFFC-281CB38A3584">
+                <dmn:text>(propertyValuationAmount * anticipatedREOSalesProceedsAdjustmentFactor) - lienUPBAmount</dmn:text>
+              </dmn:outputEntry>
+              <dmn:outputEntry id="_F0EF4010-BF77-4D1A-863F-B2A3DA9CDEA0">
+                <dmn:text>"003_calculateAnticipatedREOSalesProceedsAmount"</dmn:text>
+              </dmn:outputEntry>
+              <dmn:annotationEntry>
+                <dmn:text/>
+              </dmn:annotationEntry>
+            </dmn:rule>
+            <dmn:rule id="_3BB0E994-C9F6-41C6-B10C-E478DB11911C">
+              <dmn:inputEntry id="_BC1A88F7-B2EF-42BA-8E4D-D3FCE500339E">
+                <dmn:text>? in ["PendingSale", "Sold"]</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_A2CC8BA0-7675-4A6B-B760-1430C96898EE">
+                <dmn:text>!=null</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_05CECD14-B14A-43DE-99B4-60AB59E281D5">
+                <dmn:text>&gt;=0</dmn:text>
+              </dmn:inputEntry>
+              <dmn:inputEntry id="_DB0AF32F-D0A1-49C6-BF72-51F55EC6E4F7">
+                <dmn:text>&gt;=0</dmn:text>
+              </dmn:inputEntry>
+              <dmn:outputEntry id="_739A063F-CD79-4978-B5B6-79CAD419E85F">
+                <dmn:text>(propertyValuationAmount * anticipatedREOSalesProceedsAdjustmentFactor) - lienUPBAmount</dmn:text>
+              </dmn:outputEntry>
+              <dmn:outputEntry id="_0C16BFE0-1661-43FB-AC6A-8B451A44F907">
+                <dmn:text>"004_calculateAnticipatedREOSalesProceedsAmount"</dmn:text>
+              </dmn:outputEntry>
+              <dmn:annotationEntry>
+                <dmn:text/>
+              </dmn:annotationEntry>
+            </dmn:rule>
+          </dmn:decisionTable>
+        </dmn:contextEntry>
+        <dmn:contextEntry>
+          <dmn:literalExpression id="_D1C0C2BD-008B-4952-85B0-71000EBDE278">
+            <dmn:text>if result = null then 
+  {
+    rowIdentifier: "000_calculateAnticipatedREOSalesProceedsAmount", 
+    borrowerIdentifier: borrowerIdentifier, 
+    reoIdentifier: reoProperty.identifier, 
+    anticipatedRealEstateSalesProceedsAmount: 0
+  }
+  else {
+    rowIdentifier: result.rowIdentifier, 
+    borrowerIdentifier: borrowerIdentifier, 
+    reoIdentifier: reoProperty.identifier, 
+    anticipatedRealEstateSalesProceedsAmount: result.anticipatedRealEstateSalesProceedsAmount
+  }</dmn:text>
+          </dmn:literalExpression>
+        </dmn:contextEntry>
+      </dmn:context>
+    </dmn:encapsulatedLogic>
+    <dmn:knowledgeRequirement id="_E27EA678-C079-4AE2-96AB-EF942256F5C1">
+      <dmn:requiredKnowledge href="com.thirtySevenDecisions.demo.common.configuration#_B5D78D1B-12CA-440E-9EB8-E6831A54DC50"/>
+    </dmn:knowledgeRequirement>
+  </dmn:businessKnowledgeModel>
+  <dmn:inputData id="_5B11FC30-51BE-4C87-8CC0-C9C73787AD52" name="context">
+    <dmn:extensionElements/>
+    <dmn:variable id="_4387606C-C624-4253-A7E1-1F723CE2B95C" name="context" typeRef="configService.Context"/>
+  </dmn:inputData>
   <dmndi:DMNDI>
     <dmndi:DMNDiagram id="_A0CCEEF1-7688-405F-9C3A-4F7F6C40A021" name="DRG">
       <di:extension>
@@ -97,8 +308,45 @@
           <kie:ComponentWidths dmnElementRef="_42100EA4-0B45-4766-A1E0-06EB87C3FEA5">
             <kie:width>559</kie:width>
           </kie:ComponentWidths>
-          <kie:ComponentWidths dmnElementRef="_BC52CFB1-F36A-41C5-958E-8697FDCE0C30">
-            <kie:width>632</kie:width>
+          <kie:ComponentWidths dmnElementRef="_6A445556-76DB-4661-B658-0A52EEEB2BA9">
+            <kie:width>1299</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_8B82F1B8-A182-41E7-8D55-0E81DA08EDAC">
+            <kie:width>50</kie:width>
+            <kie:width>312</kie:width>
+            <kie:width>1475</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_19188133-519C-4842-87E2-958CD4F881BA">
+            <kie:width>1475</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_67AB7C3B-D459-4F4F-9F92-9EEC583185D6">
+            <kie:width>1475</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_E9960514-0FDC-4150-AF73-1002474C7EE4">
+            <kie:width>1475</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_0F7F9A24-F67D-4FC9-B128-A41FABC7EB9F">
+            <kie:width>1475</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_7FFB430E-6861-4307-9A08-D2097EAD1FF5">
+            <kie:width>1475</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_D1A6D79E-1165-4A64-AE5E-195BC0AECC78">
+            <kie:width>50</kie:width>
+            <kie:width>237</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>668</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_D1C0C2BD-008B-4952-85B0-71000EBDE278">
+            <kie:width>1475</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_CDC3E314-C534-4F29-9202-5F3C08DBBF23">
+            <kie:width>50</kie:width>
+            <kie:width>1857</kie:width>
           </kie:ComponentWidths>
         </kie:ComponentsWidthsExtension>
       </di:extension>
@@ -117,7 +365,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="227" y="150" width="100" height="50"/>
+        <dc:Bounds x="210" y="150" width="100" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_38ACEB46-692C-41D1-A417-C0C0C31CBF12" dmnElementRef="_38ACEB46-692C-41D1-A417-C0C0C31CBF12" isCollapsed="false">
@@ -135,37 +383,63 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="372" y="67" width="100" height="50"/>
+        <dc:Bounds x="416" y="53" width="340" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
-      <dmndi:DMNShape id="dmnshape-drg-_66927C04-5FD6-4771-BFB7-8B04B0FEADE1" dmnElementRef="included1:_66927C04-5FD6-4771-BFB7-8B04B0FEADE1" isCollapsed="false">
+      <dmndi:DMNShape id="dmnshape-drg-_83093311-0859-434B-B622-91A61AF1C10C" dmnElementRef="_83093311-0859-434B-B622-91A61AF1C10C" isCollapsed="false">
         <dmndi:DMNStyle>
           <dmndi:FillColor red="255" green="255" blue="255"/>
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="488" y="150" width="262" height="102"/>
+        <dc:Bounds x="534" y="277" width="309" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_B5D78D1B-12CA-440E-9EB8-E6831A54DC50" dmnElementRef="included2:_B5D78D1B-12CA-440E-9EB8-E6831A54DC50" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="579" y="426" width="471" height="100"/>
         <dmndi:DMNLabel/>
         <dmndi:DMNDecisionServiceDividerLine>
-          <di:waypoint x="488" y="202"/>
-          <di:waypoint x="750" y="202"/>
+          <di:waypoint x="579" y="476"/>
+          <di:waypoint x="1050" y="476"/>
         </dmndi:DMNDecisionServiceDividerLine>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_5B11FC30-51BE-4C87-8CC0-C9C73787AD52" dmnElementRef="_5B11FC30-51BE-4C87-8CC0-C9C73787AD52" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="422" y="267" width="71" height="50"/>
+        <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="dmnedge-drg-_BE566593-A33A-47F6-A797-15201C978D3F" dmnElementRef="_BE566593-A33A-47F6-A797-15201C978D3F">
         <di:waypoint x="199" y="292"/>
-        <di:waypoint x="277" y="200"/>
+        <di:waypoint x="260" y="200"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_832D3F44-B416-4D20-916F-208E181BC8D9" dmnElementRef="_832D3F44-B416-4D20-916F-208E181BC8D9">
         <di:waypoint x="338.5" y="292"/>
-        <di:waypoint x="277" y="200"/>
+        <di:waypoint x="260" y="200"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_FED02174-3757-4236-BFF7-753AF30EB4E2" dmnElementRef="_FED02174-3757-4236-BFF7-753AF30EB4E2">
-        <di:waypoint x="277" y="175"/>
-        <di:waypoint x="372" y="92"/>
+        <di:waypoint x="260" y="175"/>
+        <di:waypoint x="416" y="78"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_4F547FBA-53F9-4A26-96DA-B50114E9767B" dmnElementRef="_4F547FBA-53F9-4A26-96DA-B50114E9767B">
-        <di:waypoint x="619" y="201"/>
-        <di:waypoint x="422" y="117"/>
+      <dmndi:DMNEdge id="dmnedge-drg-_0721945A-B6B9-4726-A018-5EE0767846AF" dmnElementRef="_0721945A-B6B9-4726-A018-5EE0767846AF">
+        <di:waypoint x="457.5" y="292"/>
+        <di:waypoint x="586" y="103"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_92438FF7-73FF-4E6B-B96D-E214882AA732" dmnElementRef="_92438FF7-73FF-4E6B-B96D-E214882AA732">
+        <di:waypoint x="688.5" y="302"/>
+        <di:waypoint x="586" y="103"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_E27EA678-C079-4AE2-96AB-EF942256F5C1" dmnElementRef="_E27EA678-C079-4AE2-96AB-EF942256F5C1">
+        <di:waypoint x="814.5" y="476"/>
+        <di:waypoint x="688.5" y="327"/>
       </dmndi:DMNEdge>
     </dmndi:DMNDiagram>
   </dmndi:DMNDI>
