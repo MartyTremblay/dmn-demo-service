@@ -1,30 +1,28 @@
-@host=http://localhost:8080/dmnDemo
-
-### download dmn ###
-GET {{host}}/assetCalculations http/1.1
+@host=http://localhost:8080
 
 ### execute dmn ###
-POST {{host}}/assetCalculations http/1.1
+#POST {{host}}/assetCalculations http/1.1
+POST {{host}}/assetCalculations/getTotalAnticipatedRealEstateSalesProceedsAmount http/1.1
 Content-Type: application/json
 
 {
     "context": {
         "submittedDate": "2020-07-25"
     },
-    "reoProperties": [
+    "realEstateOwnedProperties": [
         {
-            "label": "REO_1",
+            "identifier": "REO_1",
             "dispositionStatusType": "PendingSale",
             "lienUPBAmount": 50000
         },
         {
-            "label": "REO_2",
+            "identifier": "REO_2",
             "dispositionStatusType": "PendingSale",
             "lienUPBAmount": 50000,
             "propertyEstimatedValueAmount": 100000
         },
         {
-            "label": "REO_3",
+            "identifier": "REO_3",
             "dispositionStatusType": "Sold",
             "lienUPBAmount": 50000,
             "propertyValuationAmount": 80000
@@ -34,61 +32,54 @@ Content-Type: application/json
         {
             "from": "Borrower_A",
             "to": "REO_1",
-            "arcRole": "urn:fdc:mismo:org:2009:residential/ASSET_IsAssociatedWith_ROLE"
+            "arcRole": "ASSET_IsAssociatedWith_ROLE"
         },
         {
             "from": "Borrower_B",
             "to": "REO_2",
-            "arcRole": "urn:fdc:mismo:org:2009:residential/ASSET_IsAssociatedWith_ROLE"
+            "arcRole": "ASSET_IsAssociatedWith_ROLE"
         }
     ]
 }
 
-### execute with full trace ###
-POST {{host}}/configuration/dmnresult http/1.1
+
+### execute dmn with nulls ###
+POST {{host}}/assetCalculations http/1.1
 Content-Type: application/json
 
 {
     "context": {
         "submittedDate": "2020-07-25"
-    }
-}
-
-### graceful exit, on error ###
-POST {{host}}/configuration http/1.1
-Content-Type: application/json
-
-{
-    "contekxt": {
-        "submittedDate": "2020-07-25"
-    }
-}
-
-### before 5/25 ###
-POST {{host}}/configuration/getAnticipatedREOSalesProceedsAdjustmentFactor http/1.1
-Content-Type: application/json
-
-{
-    "context": {
-        "submittedDate": "2020-04-14"
-    }
-}
-
-### after 5/25 ###
-POST {{host}}/configuration/getAnticipatedREOSalesProceedsAdjustmentFactor http/1.1
-Content-Type: application/json
-
-{
-    "context": {
-        "submittedDate": "2020-09-23"
-    }
-}
-
-### pick system date ###
-POST {{host}}/configuration/getAnticipatedREOSalesProceedsAdjustmentFactor http/1.1
-Content-Type: application/json
-
-{
-    "context": {
-    }
+    },
+    "realEstateOwnedProperties": [
+        {
+            "identifier": "REO_1",
+//            "dispositionStatusType": "PendingSale",
+            "lienUPBAmount": 50000
+        },
+        {
+            "identifier": "REO_2",
+//            "dispositionStatusType": "PendingSale",
+            "lienUPBAmount": 50000,
+            "propertyEstimatedValueAmount": 100000
+        },
+        {
+            "identifier": "REO_3",
+//            "dispositionStatusType": "Sold",
+            "lienUPBAmount": 50000,
+            "propertyValuationAmount": 80000
+        }
+    ],
+    "relationships": [
+        {
+            "from": "Borrower_A",
+            "to": "REO_1",
+            "arcRole": "ASSET_IsAssociatedWith_ROLE"
+        },
+        {
+            "from": "Borrower_B",
+            "to": "REO_2",
+            "arcRole": "ASSET_IsAssociatedWith_ROLE"
+        }
+    ]
 }
