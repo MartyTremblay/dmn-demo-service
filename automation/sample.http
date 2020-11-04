@@ -1,0 +1,14 @@
+@host=http://localhost:8080
+
+### execute dmn ###
+POST {{host}}/sample http/1.1
+Content-Type: application/json
+
+{
+    "loan": {
+        //"baseLoanAmount": 450000,
+        //"transaction": {
+            //"insuranceAmount": 52000
+        //}
+    }
+}
