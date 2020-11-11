@@ -340,7 +340,7 @@ else "unknown"</dmn:text>
         <di:waypoint x="482" y="102"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_E5AF9A5A-3499-4323-819A-E3981617F000" dmnElementRef="_E5AF9A5A-3499-4323-819A-E3981617F000">
-        <di:waypoint x="218.09345794392524" y="160.34210526315792"/>
+        <di:waypoint x="218.09345794392527" y="160.34210526315792"/>
         <di:waypoint x="385.5" y="77"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_24D3A147-CEA9-484D-AA73-DF63DA24C1BD" dmnElementRef="_24D3A147-CEA9-484D-AA73-DF63DA24C1BD">

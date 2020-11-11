@@ -17,13 +17,11 @@
 
   <properties>
     <java.version>11</java.version>
-    <kogito.version>0.16.0</kogito.version>
+    <kogito.version>0.17.0</kogito.version>
     <!--kogito.version>1.0.0-SNAPSHOT</kogito.version-->
   </properties>
-
+<!--
   <repositories>
-    <!-- Bootstrap repository to locate the parent pom when the parent pom
-      has not been build locally. -->
     <repository>
       <id>jboss-public-repository-group</id>
       <name>JBoss Public Repository Group</name>
@@ -57,7 +55,7 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-
+-->
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>

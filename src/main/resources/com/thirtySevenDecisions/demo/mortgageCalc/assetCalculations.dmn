@@ -475,7 +475,7 @@
         <di:waypoint x="300" y="173"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_0721945A-B6B9-4726-A018-5EE0767846AF" dmnElementRef="_0721945A-B6B9-4726-A018-5EE0767846AF">
-        <di:waypoint x="899.5" y="240.3421052631579"/>
+        <di:waypoint x="899.5" y="240.34210526315792"/>
         <di:waypoint x="470" y="198"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_92438FF7-73FF-4E6B-B96D-E214882AA732" dmnElementRef="_92438FF7-73FF-4E6B-B96D-E214882AA732">
